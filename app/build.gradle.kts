@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.example.lazerrun"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.lazerrun"
@@ -24,6 +24,9 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+        }
+        buildFeatures {
+            viewBinding = true
         }
     }
     compileOptions {
