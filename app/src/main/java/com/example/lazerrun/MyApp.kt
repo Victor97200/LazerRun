@@ -8,4 +8,6 @@ class MyApp : Application() {
     var chronoTotal: Long = SystemClock.elapsedRealtime()
 
     var tireValide: Short = 0
+
+    var lapCount: Short = 0
 }

@@ -1,0 +1,70 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SummaryActivity">
+
+    <TextView
+        android:id="@+id/total_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Total Time: "
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/run_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Run Time: "
+        app:layout_constraintTop_toBottomOf="@id/total_time"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/avg_speed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Average Speed: "
+        app:layout_constraintTop_toBottomOf="@id/run_time"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/min_shooting_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Min Shooting Time: "
+        app:layout_constraintTop_toBottomOf="@id/avg_speed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/avg_shooting_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Avg Shooting Time: "
+        app:layout_constraintTop_toBottomOf="@id/min_shooting_time"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/max_shooting_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Max Shooting Time: "
+        app:layout_constraintTop_toBottomOf="@id/avg_shooting_time"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/missed_shots"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Missed Shots: "
+        app:layout_constraintTop_toBottomOf="@id/max_shooting_time"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
