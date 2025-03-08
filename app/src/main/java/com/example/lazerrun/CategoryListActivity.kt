@@ -26,6 +26,9 @@ class CategoryListActivity : AppCompatActivity() {
             val category = categoryAdapter.getItem(position)
             val intent = Intent(this, ChronoActivity::class.java)
             intent.putExtra("totalLapCount", category?.lapCount)
+            intent.putExtra("categoryId", category?.id)
+            intent.putExtra("lapDistance", category?.lapDistance)
+            intent.putExtra("initialDistance", category?.initialDistance)
             startActivity(intent)
         }
 

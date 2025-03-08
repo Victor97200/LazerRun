@@ -4,69 +4,123 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.util.Log
 
 data class Summary(
     val id: String,
-    val name: String,
-    val initialDistance: Int,
-    val lapDistance: Int,
-    val lapCount: Int,
-    val tireValide: Int,
-    val shootDistance: Int,
-    val moyennetireValide: Float,
-    val tempsTotal: Long,
-    val tempsMoyen: Long
+    val categoryId: String,
+    val totalTime: Long,
+    val runTime: Long,
+    val shootingTime: Long,
+    val avgSpeed: Double,
+    val minShootingTime: Long,
+    val avgShootingTime: Long,
+    val maxShootingTime: Long,
+    val missedShots: Int
 )
 
-class SQLHelper(context: Context): SQLiteOpenHelper(context, "lazerrun.db", null, 1) {
+class SQLHelper(context: Context): SQLiteOpenHelper(context, "lazerrun.db", null, 3) { // Increment version to 3
+    private val SQL_CREATE_ENTRIES = """
+        CREATE TABLE summaries (
+            id TEXT PRIMARY KEY,
+            categoryId TEXT,
+            totalTime LONG,
+            runTime LONG,
+            avgSpeed DOUBLE,
+            minShootingTime LONG,
+            avgShootingTime LONG,
+            maxShootingTime LONG,
+            missedShots INTEGER,
+            shootingTime LONG
+        )
+    """
+    private val SQL_ADD_SHOOTING_TIME_COLUMN = "ALTER TABLE summaries ADD COLUMN shootingTime LONG"
+
     override fun onCreate(db: SQLiteDatabase) {
-        db.execSQL("CREATE TABLE categories (id TEXT PRIMARY KEY, name TEXT, initialDistance INTEGER, lapDistance INTEGER, lapCount INTEGER, tireValide INTEGER, shootDistance INTEGER, moyennetireValide FLOAT, tempsTotal TIME, tempsMoyen TIME)")
+        db.execSQL(SQL_CREATE_ENTRIES)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        db.execSQL("DROP TABLE IF EXISTS categories")
-        onCreate(db)
+        if (oldVersion < 3) {
+            db.execSQL("ALTER TABLE summaries ADD COLUMN shootingTime LONG")
+        }
+        if (oldVersion < 2) {  // Assurez-vous que runTime est aussi bien ajouté
+            db.execSQL("ALTER TABLE summaries ADD COLUMN runTime LONG")
+        }
     }
 
-    fun insertSummary(id: String, name: String, initialDistance: Int, lapDistance: Int, lapCount: Int, tireValide: Int, shootDistance: Int, moyennetireValide: Float, tempsTotal: Long, tempsMoyen: Long) {
+    override fun onDowngrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
+        onUpgrade(db, oldVersion, newVersion)
+    }
+
+    fun insertSummary(summary: Summary) {
         val db = this.writableDatabase
         val values = ContentValues().apply {
-            put("id", id)
-            put("name", name)
-            put("initialDistance", initialDistance)
-            put("lapDistance", lapDistance)
-            put("lapCount", lapCount)
-            put("tireValide", tireValide)
-            put("shootDistance", shootDistance)
-            put("moyennetireValide", moyennetireValide)
-            put("tempsTotal", tempsTotal)
-            put("tempsMoyen", tempsMoyen)
+            put("id", summary.id)
+            put("categoryId", summary.categoryId)
+            put("totalTime", summary.totalTime)
+            put("runTime", summary.runTime)
+            put("avgSpeed", summary.avgSpeed)
+            put("minShootingTime", summary.minShootingTime)
+            put("avgShootingTime", summary.avgShootingTime)
+            put("maxShootingTime", summary.maxShootingTime)
+            put("missedShots", summary.missedShots)
+            put("shootingTime", summary.shootingTime)
         }
-        db.insert("categories", null, values)
+        db.insert("summaries", null, values)
     }
 
     fun getAllSummaries(): List<Summary> {
         val db = this.readableDatabase
-        val cursor = db.query("categories", null, null, null, null, null, null)
+        val cursor = db.query("summaries", null, null, null, null, null, null)
         val summaries = mutableListOf<Summary>()
         with(cursor) {
             while (moveToNext()) {
                 val summary = Summary(
                     id = getString(getColumnIndexOrThrow("id")),
-                    name = getString(getColumnIndexOrThrow("name")),
-                    initialDistance = getInt(getColumnIndexOrThrow("initialDistance")),
-                    lapDistance = getInt(getColumnIndexOrThrow("lapDistance")),
-                    lapCount = getInt(getColumnIndexOrThrow("lapCount")),
-                    tireValide = getInt(getColumnIndexOrThrow("tireValide")),
-                    shootDistance = getInt(getColumnIndexOrThrow("shootDistance")),
-                    moyennetireValide = getFloat(getColumnIndexOrThrow("moyennetireValide")),
-                    tempsTotal = getLong(getColumnIndexOrThrow("tempsTotal")),
-                    tempsMoyen = getLong(getColumnIndexOrThrow("tempsMoyen"))
+                    categoryId = getString(getColumnIndexOrThrow("categoryId")),
+                    totalTime = getLong(getColumnIndexOrThrow("totalTime")),
+                    runTime = getLong(getColumnIndexOrThrow("runTime")),
+                    avgSpeed = getDouble(getColumnIndexOrThrow("avgSpeed")),
+                    minShootingTime = getLong(getColumnIndexOrThrow("minShootingTime")),
+                    avgShootingTime = getLong(getColumnIndexOrThrow("avgShootingTime")),
+                    maxShootingTime = getLong(getColumnIndexOrThrow("maxShootingTime")),
+                    missedShots = getInt(getColumnIndexOrThrow("missedShots")),
+                    shootingTime = getLong(getColumnIndexOrThrow("shootingTime"))
                 )
                 summaries.add(summary)
             }
         }
         cursor.close()
         return summaries
+    }
+
+    fun getSummaryById(id: String): Summary? {
+        val db = readableDatabase
+        val cursor = db.rawQuery("SELECT * FROM summaries WHERE id = ?", arrayOf(id))
+
+        Log.d("SQLHelper", "Searching for summary with id: $id")
+
+        return if (cursor.moveToFirst()) {
+            val summary = Summary(
+                id = cursor.getString(cursor.getColumnIndexOrThrow("id")),
+                totalTime = cursor.getLong(cursor.getColumnIndexOrThrow("totalTime")),
+                runTime = cursor.getLong(cursor.getColumnIndexOrThrow("runTime")),
+                shootingTime = cursor.getLong(cursor.getColumnIndexOrThrow("shootingTime")),
+                avgSpeed = cursor.getDouble(cursor.getColumnIndexOrThrow("avgSpeed")),
+                minShootingTime = cursor.getLong(cursor.getColumnIndexOrThrow("minShootingTime")),
+                avgShootingTime = cursor.getLong(cursor.getColumnIndexOrThrow("avgShootingTime")),
+                maxShootingTime = cursor.getLong(cursor.getColumnIndexOrThrow("maxShootingTime")),
+                missedShots = cursor.getInt(cursor.getColumnIndexOrThrow("missedShots")),
+                categoryId = cursor.getString(cursor.getColumnIndexOrThrow("categoryId"))
+            )
+            cursor.close()
+            Log.d("SQLHelper", "Summary found: $summary")
+            summary
+        } else {
+            cursor.close()
+            Log.d("SQLHelper", "No summary found for id: $id")
+            null
+        }
     }
 }

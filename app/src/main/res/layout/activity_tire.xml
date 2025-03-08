@@ -78,10 +78,10 @@
         android:text="fin tire"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.763"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chrono"
-        app:layout_constraintVertical_bias="0.274" />
+        app:layout_constraintHorizontal_bias="0.626"
+        app:layout_constraintStart_toEndOf="@+id/radioButton4"
+        app:layout_constraintTop_toBottomOf="@+id/chrono_tire"
+        app:layout_constraintVertical_bias="0.553" />
 
     <Chronometer
         android:id="@+id/chrono"
@@ -90,9 +90,21 @@
         android:textSize="40sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.791"
+        app:layout_constraintHorizontal_bias="0.794"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.132" />
+        app:layout_constraintVertical_bias="0.15" />
+
+    <Chronometer
+        android:id="@+id/chrono_tire"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="40sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.67"
+        app:layout_constraintStart_toEndOf="@+id/radioButton2"
+        app:layout_constraintTop_toBottomOf="@+id/chrono"
+        app:layout_constraintVertical_bias="0.224" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

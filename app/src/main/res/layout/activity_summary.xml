@@ -24,11 +24,20 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
+        android:id="@+id/chrono_tire"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Shooting Time: "
+        app:layout_constraintTop_toBottomOf="@id/run_time"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
         android:id="@+id/avg_speed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Average Speed: "
-        app:layout_constraintTop_toBottomOf="@id/run_time"
+        app:layout_constraintTop_toBottomOf="@id/chrono_tire"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
