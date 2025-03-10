@@ -6,20 +6,9 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
 
-data class Summary(
-    val id: String,
-    val categoryId: String,
-    val totalTime: Long,
-    val runTime: Long,
-    val shootingTime: Long,
-    val avgSpeed: Double,
-    val minShootingTime: Long,
-    val avgShootingTime: Long,
-    val maxShootingTime: Long,
-    val missedShots: Int
-)
 
-class SQLHelper(context: Context): SQLiteOpenHelper(context, "lazerrun.db", null, 3) { // Increment version to 3
+
+class SQLHelper(context: Context): SQLiteOpenHelper(context, "lazerrun.db", null, 4) { // Increment version to 4
     private val SQL_CREATE_ENTRIES = """
         CREATE TABLE summaries (
             id TEXT PRIMARY KEY,
@@ -31,21 +20,19 @@ class SQLHelper(context: Context): SQLiteOpenHelper(context, "lazerrun.db", null
             avgShootingTime LONG,
             maxShootingTime LONG,
             missedShots INTEGER,
-            shootingTime LONG
+            shootingTime LONG,
+            startDateTime TEXT
         )
     """
-    private val SQL_ADD_SHOOTING_TIME_COLUMN = "ALTER TABLE summaries ADD COLUMN shootingTime LONG"
+    private val SQL_ADD_START_DATE_TIME_COLUMN = "ALTER TABLE summaries ADD COLUMN startDateTime TEXT"
 
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL(SQL_CREATE_ENTRIES)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        if (oldVersion < 3) {
-            db.execSQL("ALTER TABLE summaries ADD COLUMN shootingTime LONG")
-        }
-        if (oldVersion < 2) {  // Assurez-vous que runTime est aussi bien ajouté
-            db.execSQL("ALTER TABLE summaries ADD COLUMN runTime LONG")
+        if (oldVersion < 4) {
+            db.execSQL(SQL_ADD_START_DATE_TIME_COLUMN)
         }
     }
 
@@ -66,6 +53,7 @@ class SQLHelper(context: Context): SQLiteOpenHelper(context, "lazerrun.db", null
             put("maxShootingTime", summary.maxShootingTime)
             put("missedShots", summary.missedShots)
             put("shootingTime", summary.shootingTime)
+            put("startDateTime", summary.startDateTime)
         }
         db.insert("summaries", null, values)
     }
@@ -86,7 +74,8 @@ class SQLHelper(context: Context): SQLiteOpenHelper(context, "lazerrun.db", null
                     avgShootingTime = getLong(getColumnIndexOrThrow("avgShootingTime")),
                     maxShootingTime = getLong(getColumnIndexOrThrow("maxShootingTime")),
                     missedShots = getInt(getColumnIndexOrThrow("missedShots")),
-                    shootingTime = getLong(getColumnIndexOrThrow("shootingTime"))
+                    shootingTime = getLong(getColumnIndexOrThrow("shootingTime")),
+                    startDateTime = getString(getColumnIndexOrThrow("startDateTime"))
                 )
                 summaries.add(summary)
             }
@@ -99,8 +88,6 @@ class SQLHelper(context: Context): SQLiteOpenHelper(context, "lazerrun.db", null
         val db = readableDatabase
         val cursor = db.rawQuery("SELECT * FROM summaries WHERE id = ?", arrayOf(id))
 
-        Log.d("SQLHelper", "Searching for summary with id: $id")
-
         return if (cursor.moveToFirst()) {
             val summary = Summary(
                 id = cursor.getString(cursor.getColumnIndexOrThrow("id")),
@@ -112,14 +99,13 @@ class SQLHelper(context: Context): SQLiteOpenHelper(context, "lazerrun.db", null
                 avgShootingTime = cursor.getLong(cursor.getColumnIndexOrThrow("avgShootingTime")),
                 maxShootingTime = cursor.getLong(cursor.getColumnIndexOrThrow("maxShootingTime")),
                 missedShots = cursor.getInt(cursor.getColumnIndexOrThrow("missedShots")),
-                categoryId = cursor.getString(cursor.getColumnIndexOrThrow("categoryId"))
+                categoryId = cursor.getString(cursor.getColumnIndexOrThrow("categoryId")),
+                startDateTime = cursor.getString(cursor.getColumnIndexOrThrow("startDateTime"))
             )
             cursor.close()
-            Log.d("SQLHelper", "Summary found: $summary")
             summary
         } else {
             cursor.close()
-            Log.d("SQLHelper", "No summary found for id: $id")
             null
         }
     }

@@ -1,5 +1,6 @@
 package com.example.lazerrun
 
+
 import android.content.Intent
 import android.os.Bundle
 import android.os.SystemClock
@@ -24,7 +25,7 @@ class ChronoActivity : AppCompatActivity() {
     private lateinit var categoryId: String
     private var shootingTimes = mutableListOf<Long>()
     private var runTimes = mutableListOf<Long>()
-    private lateinit var c3: Chronometer // Chronomètre de course
+    private lateinit var c3: Chronometer
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,6 +41,7 @@ class ChronoActivity : AppCompatActivity() {
             insets
         }
 
+
         val c = findViewById<Chronometer>(R.id.chrono)
         val myApp = application as MyApp
         if (myApp.chronoBase == 0L) {
@@ -51,6 +53,8 @@ class ChronoActivity : AppCompatActivity() {
         c3 = findViewById(R.id.chrono_Run)
         c3.base = SystemClock.elapsedRealtime()
         c3.start()
+
+        myApp.debutCourse = System.currentTimeMillis().toString()
 
         currentLapCount = intent.getIntExtra("currentLapCount", 0)
         totalLapCount = intent.getIntExtra("totalLapCount", 0)
@@ -151,7 +155,8 @@ class ChronoActivity : AppCompatActivity() {
                 avgShootingTime = avgShootingTime,
                 maxShootingTime = maxShootingTime,
                 missedShots = missedShots,
-                shootingTime = shootingTime
+                shootingTime = shootingTime,
+                startDateTime = (application as MyApp).debutCourse
             )
         )
         return uniqueId
