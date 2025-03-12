@@ -4,11 +4,8 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import android.util.Log
 
-
-
-class SQLHelper(context: Context): SQLiteOpenHelper(context, "lazerrun.db", null, 4) { // Increment version to 4
+class SQLHelper(context: Context): SQLiteOpenHelper(context, "lazerrun.db", null, 5) { // Increment version to 5
     private val SQL_CREATE_ENTRIES = """
         CREATE TABLE summaries (
             id TEXT PRIMARY KEY,
@@ -21,18 +18,19 @@ class SQLHelper(context: Context): SQLiteOpenHelper(context, "lazerrun.db", null
             maxShootingTime LONG,
             missedShots INTEGER,
             shootingTime LONG,
-            startDateTime TEXT
+            startDateTime TEXT,
+            locations TEXT
         )
     """
-    private val SQL_ADD_START_DATE_TIME_COLUMN = "ALTER TABLE summaries ADD COLUMN startDateTime TEXT"
+    private val SQL_ADD_LOCATIONS_COLUMN = "ALTER TABLE summaries ADD COLUMN locations TEXT"
 
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL(SQL_CREATE_ENTRIES)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        if (oldVersion < 4) {
-            db.execSQL(SQL_ADD_START_DATE_TIME_COLUMN)
+        if (oldVersion < 5) {
+            db.execSQL(SQL_ADD_LOCATIONS_COLUMN)
         }
     }
 
@@ -54,6 +52,7 @@ class SQLHelper(context: Context): SQLiteOpenHelper(context, "lazerrun.db", null
             put("missedShots", summary.missedShots)
             put("shootingTime", summary.shootingTime)
             put("startDateTime", summary.startDateTime)
+            put("locations", summary.locations)
         }
         db.insert("summaries", null, values)
     }
@@ -75,7 +74,8 @@ class SQLHelper(context: Context): SQLiteOpenHelper(context, "lazerrun.db", null
                     maxShootingTime = getLong(getColumnIndexOrThrow("maxShootingTime")),
                     missedShots = getInt(getColumnIndexOrThrow("missedShots")),
                     shootingTime = getLong(getColumnIndexOrThrow("shootingTime")),
-                    startDateTime = getString(getColumnIndexOrThrow("startDateTime"))
+                    startDateTime = getString(getColumnIndexOrThrow("startDateTime")),
+                    locations = getString(getColumnIndexOrThrow("locations"))
                 )
                 summaries.add(summary)
             }
@@ -100,7 +100,8 @@ class SQLHelper(context: Context): SQLiteOpenHelper(context, "lazerrun.db", null
                 maxShootingTime = cursor.getLong(cursor.getColumnIndexOrThrow("maxShootingTime")),
                 missedShots = cursor.getInt(cursor.getColumnIndexOrThrow("missedShots")),
                 categoryId = cursor.getString(cursor.getColumnIndexOrThrow("categoryId")),
-                startDateTime = cursor.getString(cursor.getColumnIndexOrThrow("startDateTime"))
+                startDateTime = cursor.getString(cursor.getColumnIndexOrThrow("startDateTime")),
+                locations = cursor.getString(cursor.getColumnIndexOrThrow("locations"))
             )
             cursor.close()
             summary
@@ -108,5 +109,9 @@ class SQLHelper(context: Context): SQLiteOpenHelper(context, "lazerrun.db", null
             cursor.close()
             null
         }
+    }
+    fun clearSummaries() {
+        val db = writableDatabase
+        db.delete("summaries", null, null)
     }
 }

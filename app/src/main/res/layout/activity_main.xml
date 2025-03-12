@@ -6,6 +6,20 @@
     android:id="@+id/main"
     tools:context=".MainActivity">
 
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="160dp"
+        android:contentDescription="View stats"
+        android:text="Statistiques"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button"
+        app:layout_constraintVertical_bias="0.576" />
+
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
@@ -23,6 +37,7 @@
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="56dp"
         android:layout_marginBottom="312dp"
         android:contentDescription="View race history"
         android:text="Historique"
@@ -39,5 +54,6 @@
         android:text="Lançer une course"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.755"
         app:layout_constraintStart_toEndOf="@id/button" />
 </androidx.constraintlayout.widget.ConstraintLayout>

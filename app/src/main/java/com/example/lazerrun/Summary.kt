@@ -11,5 +11,6 @@ data class Summary(
     val avgShootingTime: Long,
     val maxShootingTime: Long,
     val missedShots: Int,
-    val startDateTime: String
+    val startDateTime: String,
+    val locations: String
 )

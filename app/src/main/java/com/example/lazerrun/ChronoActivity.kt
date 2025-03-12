@@ -1,7 +1,9 @@
 package com.example.lazerrun
 
-
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.Location
 import android.os.Bundle
 import android.os.SystemClock
 import android.util.Log
@@ -10,8 +12,12 @@ import android.widget.Chronometer
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import java.util.UUID
 
 class ChronoActivity : AppCompatActivity() {
@@ -26,7 +32,8 @@ class ChronoActivity : AppCompatActivity() {
     private var shootingTimes = mutableListOf<Long>()
     private var runTimes = mutableListOf<Long>()
     private lateinit var c3: Chronometer
-
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private var currentLocation: Location? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +48,13 @@ class ChronoActivity : AppCompatActivity() {
             insets
         }
 
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1)
+        } else {
+            getCurrentLocation()
+        }
 
         val c = findViewById<Chronometer>(R.id.chrono)
         val myApp = application as MyApp
@@ -73,13 +87,9 @@ class ChronoActivity : AppCompatActivity() {
 
         val actionButton = findViewById<Button>(R.id.button3)
 
-        // Calcul du temps écoulé pour le chrono de course
-
-
         if (currentLapCount >= totalLapCount) {
             actionButton.text = "Fin de course"
             actionButton.setOnClickListener {
-
                 val runTime = SystemClock.elapsedRealtime() - c3.base
                 runTimes.add(runTime)
                 myApp.runTimes.add(runTime)
@@ -118,6 +128,21 @@ class ChronoActivity : AppCompatActivity() {
         lapCountTextView.text = "Lap $currentLapCount/$totalLapCount"
     }
 
+    private fun getCurrentLocation() {
+        try {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
+                    location?.let {
+                        currentLocation = it
+                        Log.d("ChronoActivity", "Location: ${it.latitude}, ${it.longitude}")
+                    }
+                }
+            }
+        } catch (e: SecurityException) {
+            Log.e("ChronoActivity", "Location permission not granted", e)
+        }
+    }
+
     private fun saveData(): String {
         val totalTime = SystemClock.elapsedRealtime() - (application as MyApp).chronoBase
         val uniqueId = UUID.randomUUID().toString()
@@ -129,20 +154,7 @@ class ChronoActivity : AppCompatActivity() {
         val avgSpeed = totalDistance / (totalRunTime / 1000.0)
         val shootingTime = shootingTimes.sum()
 
-
-
-        Log.d("ChronoActivity", "Saving data with the following details:")
-        Log.d("ChronoActivity", "ID: $uniqueId")
-        Log.d("ChronoActivity", "Category ID: $categoryId")
-        Log.d("ChronoActivity", "Total Time: $totalTime")
-        Log.d("ChronoActivity", "Run Time: $totalRunTime")
-        Log.d("ChronoActivity", "Average Speed: $avgSpeed")
-        Log.d("ChronoActivity", "Min Shooting Time: $minShootingTime")
-        Log.d("ChronoActivity", "Avg Shooting Time: $avgShootingTime")
-        Log.d("ChronoActivity", "Max Shooting Time: $maxShootingTime")
-        Log.d("ChronoActivity", "Missed Shots: $missedShots")
-        Log.d("ChronoActivity", "Shooting Time: $shootingTime")
-        Log.d("ChronoActivity", "Total Distance: $totalDistance")
+        val locationString = currentLocation?.let { "${it.latitude},${it.longitude}" } ?: ""
 
         dbHelper.insertSummary(
             Summary(
@@ -156,7 +168,8 @@ class ChronoActivity : AppCompatActivity() {
                 maxShootingTime = maxShootingTime,
                 missedShots = missedShots,
                 shootingTime = shootingTime,
-                startDateTime = (application as MyApp).debutCourse
+                startDateTime = (application as MyApp).debutCourse,
+                locations = locationString
             )
         )
         return uniqueId
