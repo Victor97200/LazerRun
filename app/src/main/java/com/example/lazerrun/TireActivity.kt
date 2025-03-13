@@ -6,8 +6,8 @@ import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock
 import android.widget.Button
+import android.widget.CheckBox
 import android.widget.Chronometer
-import android.widget.RadioButton
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -63,18 +63,26 @@ class TireActivity : AppCompatActivity() {
 
     private fun handleButtonClick() {
         val myApp = application as MyApp
-        val radioButtons = listOf(
-            findViewById<RadioButton>(R.id.radioButton),
-            findViewById<RadioButton>(R.id.radioButton2),
-            findViewById<RadioButton>(R.id.radioButton3),
-            findViewById<RadioButton>(R.id.radioButton4),
-            findViewById<RadioButton>(R.id.radioButton5)
+
+        // Récupère les CheckBoxes
+        val checkBoxes = listOf(
+            findViewById<CheckBox>(R.id.checkBox1),
+            findViewById<CheckBox>(R.id.checkBox2),
+            findViewById<CheckBox>(R.id.checkBox3),
+            findViewById<CheckBox>(R.id.checkBox4),
+            findViewById<CheckBox>(R.id.checkBox5)
         )
 
-        for (radioButton in radioButtons) {
-            if (radioButton.isChecked) myApp.tireValide++ else missedShots++
+        // Compter les tirs valides et les tirs manqués
+        for (checkBox in checkBoxes) {
+            if (checkBox.isChecked) {
+                myApp.tireValide++  // Tire valide
+            } else {
+                missedShots++  // Tire manqué
+            }
         }
 
+        // Enregistrer le temps de tir
         val shootingTime = SystemClock.elapsedRealtime() - findViewById<Chronometer>(R.id.chrono_tire).base
         shootingTimes.add(shootingTime)
         myApp.shootingTimes.add(shootingTime)

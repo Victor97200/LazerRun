@@ -7,104 +7,86 @@
     android:layout_height="match_parent"
     tools:context=".TireActivity">
 
-
-    <RadioButton
-        android:id="@+id/radioButton"
+    <!-- Groupement des CheckBox -->
+    <LinearLayout
+        android:id="@+id/checkBoxGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Tire1"
-        app:layout_constraintBottom_toTopOf="@+id/radioButton2"
-        app:layout_constraintEnd_toStartOf="@+id/chrono"
-        app:layout_constraintHorizontal_bias="0.251"
+        android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.575" />
+        app:layout_constraintBottom_toTopOf="@+id/button4"
+        android:layout_margin="16dp">
 
-    <RadioButton
-        android:id="@+id/radioButton2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="80dp"
-        android:text="Tire2"
-        app:layout_constraintBottom_toTopOf="@+id/radioButton3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.113"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.995" />
+        <CheckBox
+            android:id="@+id/checkBox1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tire1"
+            android:layout_marginBottom="8dp"/>
 
-    <RadioButton
-        android:id="@+id/radioButton3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="76dp"
-        android:text="Tire3"
-        app:layout_constraintBottom_toTopOf="@+id/radioButton4"
-        app:layout_constraintEnd_toStartOf="@+id/button4"
-        app:layout_constraintHorizontal_bias="0.216"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.997" />
+        <CheckBox
+            android:id="@+id/checkBox2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tire2"
+            android:layout_marginBottom="8dp"/>
 
-    <RadioButton
-        android:id="@+id/radioButton4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="96dp"
-        android:text="Tire4"
-        app:layout_constraintBottom_toTopOf="@+id/radioButton5"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.113"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        <CheckBox
+            android:id="@+id/checkBox3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tire3"
+            android:layout_marginBottom="8dp"/>
 
-    <RadioButton
-        android:id="@+id/radioButton5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Tire5"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.113"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.976" />
+        <CheckBox
+            android:id="@+id/checkBox4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tire4"
+            android:layout_marginBottom="8dp"/>
 
-    <Button
-        android:id="@+id/button4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="fin tire"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.626"
-        app:layout_constraintStart_toEndOf="@+id/radioButton4"
-        app:layout_constraintTop_toBottomOf="@+id/chrono_tire"
-        app:layout_constraintVertical_bias="0.553" />
+        <CheckBox
+            android:id="@+id/checkBox5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tire5"
+            android:layout_marginBottom="8dp"/>
 
+    </LinearLayout>
+
+    <!-- Chronomètre principal -->
     <Chronometer
         android:id="@+id/chrono"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="40sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.794"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textColor="@android:color/holo_blue_dark"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.15" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="16dp" />
 
+    <!-- Chronomètre des tire -->
     <Chronometer
         android:id="@+id/chrono_tire"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="16dp"
         android:textSize="40sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textColor="@android:color/holo_red_dark"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.67"
-        app:layout_constraintStart_toEndOf="@+id/radioButton2"
-        app:layout_constraintTop_toBottomOf="@+id/chrono"
-        app:layout_constraintVertical_bias="0.224" />
+        app:layout_constraintTop_toBottomOf="@id/chrono" />
+
+    <!-- Bouton Fin Tire -->
+    <Button
+        android:id="@+id/button4"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Fin Tire"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="16dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
