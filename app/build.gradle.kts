@@ -47,13 +47,18 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.play.services.location)
     implementation(libs.play.services.maps)
+    implementation(libs.androidx.espresso.core)
+    implementation(libs.androidx.junit.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(libs.androidx.rules)
+    androidTestImplementation(libs.androidx.runner)
     implementation(libs.androidx.core.ktx.v1120)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
     implementation(libs.kotlinx.coroutines.android)
+
 }

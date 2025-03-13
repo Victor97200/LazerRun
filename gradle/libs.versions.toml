@@ -19,12 +19,17 @@ osmdroidAndroid = "6.1.18"
 playServicesLocation = "21.3.0"
 playServicesMaps = "19.1.0"
 retrofit = "2.9.0"
+junitKtx = "1.2.1"
+rules = "1.6.1"
+runner = "1.6.2"
 
 [libraries]
 androidx-appcompat-v161 = { module = "androidx.appcompat:appcompat", version.ref = "appcompatVersion" }
 androidx-core = { module = "androidx.core:core", version.ref = "coreKtx" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-core-ktx-v1120 = { module = "androidx.core:core-ktx", version.ref = "coreKtxVersion" }
+androidx-rules = { module = "androidx.test:rules", version.ref = "rules" }
+androidx-runner = { module = "androidx.test:runner", version.ref = "runner" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
 graphview = { module = "com.jjoe64:graphview", version.ref = "graphview" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -41,6 +46,7 @@ osmdroid-android = { module = "org.osmdroid:osmdroid-android", version.ref = "os
 play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }
 play-services-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "playServicesMaps" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+androidx-junit-ktx = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "junitKtx" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

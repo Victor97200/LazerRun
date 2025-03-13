@@ -1,3 +1,4 @@
+
 package com.example.lazerrun
 
 import android.Manifest
@@ -42,6 +43,7 @@ class ChronoActivity : AppCompatActivity() {
 
         dbHelper = SQLHelper(this)
 
+        // Gestion des marges pour les barres système
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -50,6 +52,7 @@ class ChronoActivity : AppCompatActivity() {
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
+        // Vérification des permissions de localisation
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1)
         } else {
@@ -70,6 +73,7 @@ class ChronoActivity : AppCompatActivity() {
 
         myApp.debutCourse = System.currentTimeMillis().toString()
 
+        // Récupération des données de l'intent
         currentLapCount = intent.getIntExtra("currentLapCount", 0)
         totalLapCount = intent.getIntExtra("totalLapCount", 0)
         initialDistance = intent.getIntExtra("initialDistance", 0)
@@ -87,7 +91,9 @@ class ChronoActivity : AppCompatActivity() {
 
         val actionButton = findViewById<Button>(R.id.button3)
 
+        // Configuration du bouton d'action en fonction du nombre de tours
         if (currentLapCount >= totalLapCount) {
+            // Si c'est le dernier tour, transition vers l'activité de resumer
             actionButton.text = "Fin de course"
             actionButton.setOnClickListener {
                 val runTime = SystemClock.elapsedRealtime() - c3.base
@@ -103,6 +109,7 @@ class ChronoActivity : AppCompatActivity() {
                 finish()
             }
         } else {
+            // transition vers l'activité de tir
             actionButton.text = "Tire"
             actionButton.setOnClickListener {
                 val runTime = SystemClock.elapsedRealtime() - c3.base
@@ -122,12 +129,12 @@ class ChronoActivity : AppCompatActivity() {
             }
         }
     }
-
+    // Mise à jour du texte du nombre de tours
     private fun updateLapCountTextView() {
         val lapCountTextView = findViewById<TextView>(R.id.textView2)
         lapCountTextView.text = "Lap $currentLapCount/$totalLapCount"
     }
-
+    // Récupération de la localisation actuelle
     private fun getCurrentLocation() {
         try {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -142,7 +149,7 @@ class ChronoActivity : AppCompatActivity() {
             Log.e("ChronoActivity", "Location permission not granted", e)
         }
     }
-
+    // Enregistrement des données de la course
     private fun saveData(): String {
         val totalTime = SystemClock.elapsedRealtime() - (application as MyApp).chronoBase
         val uniqueId = UUID.randomUUID().toString()

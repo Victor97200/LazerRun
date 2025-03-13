@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat
 
 
 class MainActivity : AppCompatActivity() {
+    // demande de permission
     private val LOCATION_PERMISSION_REQUEST_CODE = 1
     private lateinit var dbHelper: SQLHelper
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,6 +42,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // Fonction appelée après la demande de permission
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {

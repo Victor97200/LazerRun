@@ -22,6 +22,7 @@ class CategoryListActivity : AppCompatActivity() {
         categoryAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, mutableListOf())
         listView.adapter = categoryAdapter
 
+        // Gestion des clics sur les éléments de la liste
         listView.setOnItemClickListener { _, _, position, _ ->
             val category = categoryAdapter.getItem(position)
             val intent = Intent(this, ChronoActivity::class.java)
@@ -32,7 +33,7 @@ class CategoryListActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        // Initialize Retrofit service
+        // Initialisation du service Retrofit
         val retrofit = Retrofit.Builder()
             .baseUrl("https://kahriboo.com/")
             .addConverterFactory(GsonConverterFactory.create())
@@ -40,6 +41,7 @@ class CategoryListActivity : AppCompatActivity() {
 
         service = retrofit.create(LaserRunService::class.java)
 
+        // Récupération des catégories
         fetchCategories()
     }
 

@@ -18,22 +18,26 @@ class StatsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_stats)
 
+        // Initialisation de la base de données
         dbHelper = SQLHelper(this)
         missedShotsChart = findViewById(R.id.missedShotsChart)
         avgSpeedChart = findViewById(R.id.avgSpeedChart)
 
+        // Récupération des résumés depuis la base de données
         val summaries = dbHelper.getAllSummaries()
         if (summaries.isEmpty()) return
 
         val missedShotsEntries = mutableListOf<Entry>()
         val avgSpeedEntries = mutableListOf<Entry>()
 
+        // Remplissage des données pour les graphiques
         summaries.forEachIndexed { index, summary ->
-            val xValue = index.toFloat() // Use index for X-axis
+            val xValue = index.toFloat() // Utilisation de l'index pour l'axe X
             missedShotsEntries.add(Entry(xValue, summary.missedShots.toFloat()))
             avgSpeedEntries.add(Entry(xValue, summary.avgSpeed.toFloat()))
         }
 
+        // Configuration du graphique des tirs manqués
         val missedShotsDataSet = LineDataSet(missedShotsEntries, "Missed Shots").apply {
             color = Color.RED
             valueTextColor = Color.BLACK
@@ -41,6 +45,7 @@ class StatsActivity : AppCompatActivity() {
             circleRadius = 5f
         }
 
+        // Configuration du graphique de la vitesse moyenne
         val avgSpeedDataSet = LineDataSet(avgSpeedEntries, "Avg Speed").apply {
             color = Color.BLUE
             valueTextColor = Color.BLACK
@@ -48,6 +53,7 @@ class StatsActivity : AppCompatActivity() {
             circleRadius = 5f
         }
 
+        // Affichage des graphiques
         missedShotsChart.data = LineData(missedShotsDataSet)
         missedShotsChart.invalidate()
         missedShotsChart.description.text = "Missed Shots Over Time"

@@ -29,12 +29,14 @@ class TireActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_tire)
 
+        // Gestion des marges pour les barres système
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
+        // Initialisation des chronomètres
         val c = findViewById<Chronometer>(R.id.chrono)
         c.base = (application as MyApp).chronoBase
         c.start()
@@ -43,6 +45,7 @@ class TireActivity : AppCompatActivity() {
         c2.base = SystemClock.elapsedRealtime()
         c2.start()
 
+        // Récupération des données de l'intent
         currentLapCount = intent.getIntExtra("currentLapCount", 1)
         totalLapCount = intent.getIntExtra("totalLapCount", 0)
         missedShots = intent.getIntExtra("missedShots", 0)
@@ -51,11 +54,13 @@ class TireActivity : AppCompatActivity() {
         initialDistance = intent.getIntExtra("initialDistance", 0)
         lapDistance = intent.getIntExtra("lapDistance", 0)
 
+        // Gestion du délai avant la transition
         handler = Handler(Looper.getMainLooper())
         handler.postDelayed({
             transitionToChronoActivity()
-        }, 50000) // 50 seconds
+        }, 50000) // 50 secondes
 
+        // Gestion du clic sur le bouton
         findViewById<Button>(R.id.button4).setOnClickListener {
             handleButtonClick()
         }
@@ -93,6 +98,7 @@ class TireActivity : AppCompatActivity() {
         transitionToChronoActivity()
     }
 
+    // Transition vers l'activité de chrono
     private fun transitionToChronoActivity() {
         val intent = Intent(this, ChronoActivity::class.java)
         intent.putExtra("currentLapCount", currentLapCount + 1)

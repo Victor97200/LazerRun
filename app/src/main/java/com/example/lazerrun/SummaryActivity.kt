@@ -22,6 +22,7 @@ class SummaryActivity : AppCompatActivity() {
         val summaryId = intent.getStringExtra("summaryId") ?: return
         val summary = dbHelper.getSummaryById(summaryId) ?: return
 
+        // Récupération des coordonnées de localisation
         summary.locations.split(",").let {
             if (it.size == 2) {
                 location = GeoPoint(it[0].toDouble(), it[1].toDouble())
@@ -33,6 +34,7 @@ class SummaryActivity : AppCompatActivity() {
         mapView.setTileSource(TileSourceFactory.MAPNIK)
         mapView.setMultiTouchControls(true)
 
+        // Ajout d'un marqueur sur la carte
         location?.let {
             val marker = Marker(mapView)
             marker.position = it
@@ -49,6 +51,7 @@ class SummaryActivity : AppCompatActivity() {
         val summaryId = intent.getStringExtra("summaryId") ?: return
         val summary = dbHelper.getSummaryById(summaryId) ?: return
 
+        // Affichage des détails du résumé
         findViewById<TextView>(R.id.total_time).text = "Total Time: ${formatTime(summary.totalTime)}"
         findViewById<TextView>(R.id.run_time).text = "Run Time: ${formatTime(summary.runTime)}"
         findViewById<TextView>(R.id.chrono_tire).text = "Shooting Time: ${formatTime(summary.shootingTime)}"
