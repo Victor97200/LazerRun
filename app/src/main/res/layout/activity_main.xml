@@ -13,7 +13,7 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Lazer Run"
+        android:text="Laser Run"
         android:textSize="28sp"
         android:textStyle="bold"
         android:textColor="@android:color/black"

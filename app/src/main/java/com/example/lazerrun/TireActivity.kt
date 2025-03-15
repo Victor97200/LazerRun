@@ -111,4 +111,10 @@ class TireActivity : AppCompatActivity() {
 
         startActivity(intent)
     }
+
+    // enlever le timer de 50 secondes
+    override fun onDestroy() {
+        super.onDestroy()
+        handler.removeCallbacksAndMessages(null)
+    }
 }
